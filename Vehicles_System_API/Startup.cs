@@ -8,6 +8,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+using Services.Interfaces;
+using Services.Servives;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,7 +33,30 @@ namespace Vehicles_System_API
         {
             //var connection = Configuration["ConexaoMySql:MySqlConnectionString"];
             //services.AddDbContext<VehiclesContext>(options => options.UseMySql(connection));
+
+            services.AddMvc().AddNewtonsoftJson(options =>
+            {
+                options.SerializerSettings.ContractResolver = new DefaultContractResolver
+                {
+                    NamingStrategy = new SnakeCaseNamingStrategy()
+                };
+
+                options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
+            });
+
             services.AddControllers();
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy",
+                    builder => builder
+                   .AllowAnyMethod()
+                   .AllowAnyHeader()
+                   .SetIsOriginAllowed((host) => true)
+                   .AllowCredentials());
+            });
+
+            services.AddScoped<IVehiclesService, VehiclesServices>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -43,6 +70,8 @@ namespace Vehicles_System_API
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors("CorsPolicy");
 
             app.UseAuthorization();
 

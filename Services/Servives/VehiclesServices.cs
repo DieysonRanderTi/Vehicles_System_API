@@ -1,17 +1,51 @@
 ﻿using Domain.Data;
 using Domain.Entities;
 using Domain.Response;
+using Microsoft.EntityFrameworkCore;
+using Services.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
-using System.Text;
-using static Domain.Response.ResultResponse<T>;
 
 namespace Services.Servives
 {
-    public class VehiclesServices
+    public class VehiclesServices: IVehiclesService
     {
         VehiclesContext context = new VehiclesContext();
+
+        public IEnumerable<SalesAd> GetAll()
+        {
+          
+               var saleAds = context.SaleAds.ToList();
+
+               return saleAds;
+           
+        }
+
+        public ResultResponse<SalesAd> GetOne(int id)
+        {
+            try
+            {
+                var result = context.SaleAds.Where(x => x.Id == id).FirstOrDefault();
+
+                if(result == null)
+                {
+                    return Error<SalesAd>(HttpStatusCode.InternalServerError, "Anúncio não encontrado", "");
+                }
+                else
+                {
+                    return new ResultResponse<SalesAd> { Data = result };
+                }
+                
+            }
+            catch (Exception ex)
+            {
+                return Error<SalesAd>(HttpStatusCode.InternalServerError, "Erro ao buscar o resgistro", ex.Message);             
+            }
+            
+
+        }
 
         public ResultResponse<SalesAd> InsertSaleAd(SalesAd ad)
         {
@@ -20,18 +54,6 @@ namespace Services.Servives
             {
                 if(ad != null)
                 {
-                    //SalesAd response = new SalesAd
-                    //{
-                    //    Id = ad.Id,
-                    //    CarModelId = ad.CarModelId,
-                    //    Color = ad.Color,
-                    //    BuyValue = ad.BuyValue,
-                    //    FuelType = ad.FuelType,
-                    //    MakeCarId = ad.MakeCarId,
-                    //    SaleDate = ad.SaleDate,
-                    //    SaleValue = ad.SaleValue,
-                    //    YearFabrication = ad.YearFabrication
-                    //};
                     response = ad;
                     context.SaleAds.Add(response);
                     context.SaveChanges();
@@ -43,6 +65,62 @@ namespace Services.Servives
             {
                 return Error<SalesAd>(HttpStatusCode.InternalServerError, "Erro ao cadastrar o anuncio", ex.Message);
             }
+        }
+
+        public ResultResponse<SalesAd> UpdateSaleAd(int id, SalesAd saleAd)
+        {
+            try
+            {
+                var newSaleAd = context.SaleAds.Where(x => x.Id == id).FirstOrDefault();
+
+                if (newSaleAd != null)
+                {
+                    newSaleAd.Id = id;
+                    newSaleAd.MakeCarId = saleAd.MakeCarId;
+                    newSaleAd.SaleDate = saleAd.SaleDate;
+                    newSaleAd.SaleValue = saleAd.SaleValue;
+                    newSaleAd.YearFabrication = saleAd.YearFabrication;
+                    newSaleAd.BuyValue = saleAd.BuyValue;
+                    newSaleAd.CarModelId = saleAd.CarModelId;
+                    newSaleAd.Color = saleAd.Color;
+                    newSaleAd.FuelType = saleAd.FuelType;
+
+                    context.SaveChanges();
+
+                    return new ResultResponse<SalesAd> { Data = newSaleAd };
+                }
+                else {
+                    return Error<SalesAd>(HttpStatusCode.InternalServerError, "Erro ao atualizar o produto", "");
+                }
+
+               
+            }
+            catch (Exception ex)
+            {
+
+                return Error<SalesAd>(HttpStatusCode.InternalServerError, "Erro ao atualizar o produto", ex.Message);
+            }
+        }
+
+        public ResultResponse<SalesAd> DeleteSaleAd(int id)
+        {
+            try
+            {
+                var saleAd = context.SaleAds.Where(x => x.Id == id).FirstOrDefault();
+
+                if (saleAd != null)
+                {
+                    context.SaleAds.Remove(saleAd);
+                    context.SaveChanges();
+                }
+
+                return new ResultResponse<SalesAd> { Data = saleAd };
+            }
+            catch (Exception ex)
+            {
+                return Error<SalesAd>(HttpStatusCode.InternalServerError, "Não foi possivel excluir o resgistro", ex.Message);
+            }
+           
         }
 
         private ResultResponse<T> Error<T>(HttpStatusCode status, string message, string details) where T : new()

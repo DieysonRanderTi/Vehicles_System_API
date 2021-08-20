@@ -15,7 +15,7 @@ namespace Domain.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseMySql("datasource=localhost;database=VehiclesDb;port=3306;username=root;password=drstcpf041190;SslMode=none;AllowPublicKeyRetrieval = True");
+            optionsBuilder.UseMySql("datasource=localhost;database=VehiclesDb;port=3306;username=root;password=drstcpf041190;SslMode=none;AllowPublicKeyRetrieval = True; convert zero datetime=True");
         }   
 
     }
