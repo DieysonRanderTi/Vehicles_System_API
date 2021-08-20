@@ -31,8 +31,6 @@ namespace Vehicles_System_API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //var connection = Configuration["ConexaoMySql:MySqlConnectionString"];
-            //services.AddDbContext<VehiclesContext>(options => options.UseMySql(connection));
 
             services.AddMvc().AddNewtonsoftJson(options =>
             {
@@ -57,6 +55,8 @@ namespace Vehicles_System_API
             });
 
             services.AddScoped<IVehiclesService, VehiclesServices>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<ICarMakeAndModelService, CarMakeAndModelService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
