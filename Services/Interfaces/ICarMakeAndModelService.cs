@@ -8,11 +8,12 @@ namespace Services.Interfaces
 {
     public interface ICarMakeAndModelService
     {
+        public IEnumerable<MakeCar> GetAllMakeCar();
         public ResultResponse<MakeCar> InsertMake(MakeCar makeCar);
         public ResultResponse<MakeCar> UpdateMake(int id, MakeCar makeCar);
         public ResultResponse<MakeCar> DeleteMake(int id);
 
-
+        public IEnumerable<CarModel> GetAllCarModel();
         public ResultResponse<CarModel> InsertCarModel(CarModel carModel);
         public ResultResponse<CarModel> UpdateCarModel(int id, CarModel carModel);
         public ResultResponse<CarModel> DeleteCarModel(int id);

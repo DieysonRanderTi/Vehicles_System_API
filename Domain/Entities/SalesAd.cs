@@ -15,10 +15,14 @@ namespace Domain.Entities
 
         [DataMember(Name ="makeCarId")]
         public int MakeCarId { get; set; }
+
+        [DataMember(Name = "makeCar")]
         public MakeCar MakeCar { get; set; }
 
         [DataMember(Name = "carModelId")]
         public int CarModelId { get; set; }
+
+        [DataMember(Name = "carModel")]
         public CarModel CarModel { get; set; }
 
         [DataMember(Name = "yearFabrication")]

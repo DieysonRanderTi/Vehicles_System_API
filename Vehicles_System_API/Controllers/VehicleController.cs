@@ -119,6 +119,13 @@ namespace Vehicles_System_API.Controllers
         //Fim dos controladores dos Usuários
 
         //Inicio dos controladores da Marca do veiculo
+        [HttpGet]
+        [Route("getAllMakeCar")]
+        public IActionResult GetAllMakeCar()
+        {
+            return Ok(_carMakeAndModelService.GetAllMakeCar());
+        }
+
         [HttpPost]
         [Route("insertMakeCar")]
         public IActionResult InsertMakeCar(MakeCar makeCar)
@@ -152,6 +159,13 @@ namespace Vehicles_System_API.Controllers
         //Fim dos controladores da Marca do veiculo
 
         //Inicio dos controladores do modelo do veiculo
+        [HttpGet]
+        [Route("getAllCarModel")]
+        public IActionResult GetAllCarModel()
+        {
+            return Ok(_carMakeAndModelService.GetAllCarModel());
+        }
+
         [HttpPost]
         [Route("insertCarModel")]
         public IActionResult InsertCarModel(CarModel carModel)
@@ -173,7 +187,7 @@ namespace Vehicles_System_API.Controllers
             return StatusCode(statusCode, new { result = resultService });
         }
         [HttpDelete]
-        [Route("deleteMakeCar/{id}")]
+        [Route("deleteCarModel/{id}")]
         public IActionResult DeleteCarModel(int id)
         {
             ResultResponse<CarModel> resultService = _carMakeAndModelService.DeleteCarModel(id);

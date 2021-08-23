@@ -17,9 +17,8 @@ namespace Services.Servives
         public IEnumerable<SalesAd> GetAll()
         {
           
-               var saleAds = context.SaleAds.ToList();
-
-               return saleAds;
+            var saleAds = context.SaleAds.ToList();
+            return saleAds;
            
         }
 
@@ -28,13 +27,18 @@ namespace Services.Servives
             try
             {
                 var result = context.SaleAds.Where(x => x.Id == id).FirstOrDefault();
+                var Make = context.MakeCars.Where(x => x.Id == result.MakeCarId).FirstOrDefault();
+                var carMOdel = context.CarModels.Where(x => x.Id == result.CarModelId).FirstOrDefault();
 
-                if(result == null)
+                if (result == null)
                 {
                     return Error<SalesAd>(HttpStatusCode.InternalServerError, "Anúncio não encontrado", "");
                 }
                 else
                 {
+                    result.CarModel.Description = carMOdel.Description;
+                    result.MakeCar.Description = Make.Description;
+
                     return new ResultResponse<SalesAd> { Data = result };
                 }
                 

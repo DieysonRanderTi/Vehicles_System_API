@@ -15,6 +15,15 @@ namespace Services.Servives
         VehiclesContext context = new VehiclesContext();
 
         //Início dos metodos Relacionados a Marca do veículo
+        public IEnumerable<MakeCar> GetAllMakeCar()
+        {
+
+            var makeCar = context.MakeCars.ToList();
+
+            return makeCar;
+
+        }
+
         public ResultResponse<MakeCar> InsertMake(MakeCar makeCar)
         {
             try
@@ -91,6 +100,15 @@ namespace Services.Servives
         //Fim dos metodos Relacionados a Marca do veículo
 
         //Início dos metodos Relacionados ao Modelo do veículo
+        public IEnumerable<CarModel> GetAllCarModel()
+        {
+
+            var carModel = context.CarModels.ToList();
+
+            return carModel;
+
+        }
+
         public ResultResponse<CarModel> InsertCarModel(CarModel carModel)
         {
             try
